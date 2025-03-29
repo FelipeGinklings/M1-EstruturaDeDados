@@ -48,15 +48,15 @@ void imprimirBaralho(ListaDuplamenteEncadeada<TipoCarta> &listaDeCartas) {
     }
 }
 
-bool operator>(TipoCarta cartaA, TipoCarta cartaB) {
+inline bool operator>(const TipoCarta cartaA, const TipoCarta cartaB) {
     return 10 * cartaA.naipe + cartaA.numero > 10 * cartaB.naipe + cartaB.numero;
 }
 
-bool operator<(TipoCarta cartaA, TipoCarta cartaB) {
+inline bool operator<(const TipoCarta cartaA, const TipoCarta cartaB) {
     return 10 * cartaA.naipe + cartaA.numero < 10 * cartaB.naipe + cartaB.numero;
 }
 
-bool operator<=(TipoCarta cartaA, TipoCarta cartaB) {
+inline bool operator<=(const TipoCarta cartaA, const TipoCarta cartaB) {
     return 10 * cartaA.naipe + cartaA.numero <= 10 * cartaB.naipe + cartaB.numero;
 }
 

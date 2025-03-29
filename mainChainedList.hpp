@@ -1,9 +1,10 @@
-#include <stdlib.h>
-#include <time.h>
+#ifndef MAINCHAINEDLIST_H_INCLUDED
+#define MAINCHAINEDLIST_H_INCLUDED
+
 #include <iostream>
 
 #include "chainedList.hpp"
-#include "poker.hpp"
+#include "pokerCL.hpp"
 
 void jogo(
     ListaEncadeada<TipoCarta> dealer,
@@ -75,7 +76,7 @@ void testes(ListaEncadeada<TipoCarta> &dealer) {
     imprimirBaralho(dealer);
 }
 
-int main() {
+int mainChainedList() {
     ListaEncadeada<TipoCarta> dealer;
     ListaEncadeada<TipoCarta> mesa;
     ListaEncadeada<TipoCarta> jogadores[4];
@@ -88,11 +89,13 @@ int main() {
 
     criarBaralho(dealer);
 
-    // Testes
-//    testes(dealer);
+//     Testes
+    testes(dealer);
 
     // Jogo
 //    jogo(dealer, mesa, jogadores);
 
     return 0;
 }
+
+#endif // MAINCHAINEDLIST_H_INCLUDED

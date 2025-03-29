@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "2chainedList.hpp"
-#include "poker.hpp"
+#include "poker2CL.hpp"
 
 using namespace std;
 
@@ -55,16 +55,16 @@ void jogo(
 }
 
 void testes(ListaDuplamenteEncadeada<TipoCarta> &dealer) {
-    cout << "Deck Inicial: \n\n";
-    imprimirBaralho(dealer);
-
-    cout << "\nDeck Embaralhado: \n\n";
-    embaralhar(dealer);
-    imprimirBaralho(dealer);
-
-    cout << "\nDeck Arrumado Depois de Embaralhado(bubble): \n\n";
-    bubbleSort(dealer);
-    imprimirBaralho(dealer);
+    // cout << "Deck Inicial: \n\n";
+    // imprimirBaralho(dealer);
+    //
+    // cout << "\nDeck Embaralhado: \n\n";
+    // embaralhar(dealer);
+    // imprimirBaralho(dealer);
+    //
+    // cout << "\nDeck Arrumado Depois de Embaralhado(bubble): \n\n";
+    // bubbleSort(dealer);
+    // imprimirBaralho(dealer);
 
     cout << "\nDeck Embaralhado: \n\n";
     embaralhar(dealer);
@@ -75,7 +75,7 @@ void testes(ListaDuplamenteEncadeada<TipoCarta> &dealer) {
     imprimirBaralho(dealer);
 }
 
-int main() {
+int main2ChainedList() {
     ListaDuplamenteEncadeada<TipoCarta> dealer{};
     ListaDuplamenteEncadeada<TipoCarta> mesa{};
     ListaDuplamenteEncadeada<TipoCarta> jogadores[4];

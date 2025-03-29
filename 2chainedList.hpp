@@ -6,8 +6,8 @@
 template <typename Tipo>
 struct Item {
     Tipo dado;
-    Item<Tipo> *proximo;
-    Item<Tipo> *anterior;
+    Item *proximo;
+    Item *anterior;
 };
 
 template <typename Tipo>
@@ -24,7 +24,7 @@ void inicializarLista(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada) 
 
 template <typename Tipo>
 int obterTamanhoLista(ListaDuplamenteEncadeada<Tipo> listaDuplamenteEncadeada) {
-    Item<Tipo> *temp = listaDuplamenteEncadeada.inicio;
+    Item<Tipo> *nav = listaDuplamenteEncadeada.inicio;
 
     if (listaDuplamenteEncadeada.inicio == nullptr) {
         return 0;
@@ -32,8 +32,8 @@ int obterTamanhoLista(ListaDuplamenteEncadeada<Tipo> listaDuplamenteEncadeada) {
 
     int i;
 
-    for (i = 0; temp != nullptr; i++)
-        temp = temp->proximo;
+    for (i = 0; nav != nullptr; i++)
+        nav = nav->proximo;
 
     return i;
 }
@@ -59,7 +59,7 @@ bool adicionarFim(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, Tipo
         listaDuplamenteEncadeada.fim = novoItem;
         listaDuplamenteEncadeada.inicio = novoItem;
         return true;
-    };
+    }
 
     novoItem->anterior = listaDuplamenteEncadeada.fim;
     listaDuplamenteEncadeada.fim->proximo = novoItem;
@@ -108,22 +108,22 @@ bool removerPosicao(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, co
     if (indice == tamanho-1) return removerFim(listaDuplamenteEncadeada);
 
     const bool maiorQueMetade = indice > tamanho / 2;
-    Item<Tipo> *temp;
+    Item<Tipo> *nav;
 
     if (maiorQueMetade) {
-        temp = listaDuplamenteEncadeada.fim;
+        nav = listaDuplamenteEncadeada.fim;
         for (int i = tamanho - 1; i > indice; --i) {
-            temp = temp->anterior;
+            nav = nav->anterior;
         }
     } else {
-        temp = listaDuplamenteEncadeada.inicio;
+        nav = listaDuplamenteEncadeada.inicio;
         for (int i = 0; i < indice; i++) {
-            temp = temp->proximo;
+            nav = nav->proximo;
         }
     }
-    const Item<Tipo> *paraDeletar = temp;
-    temp->anterior->proximo = temp->proximo;
-    temp->proximo->anterior = temp->anterior;
+    const Item<Tipo> *paraDeletar = nav;
+    nav->anterior->proximo = nav->proximo;
+    nav->proximo->anterior = nav->anterior;
     delete paraDeletar;
     return true;
 }
@@ -147,23 +147,23 @@ bool adicionarPosicao(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, 
     };
 
     const bool maiorQueMetade = indice > tamanho / 2;
-    Item<Tipo> *temp;
+    Item<Tipo> *nav;
 
     if (maiorQueMetade) {
-        temp = listaDuplamenteEncadeada.fim;
+        nav = listaDuplamenteEncadeada.fim;
         for (int i = tamanho-1; i > indice; --i) {
-            temp = temp->anterior;
+            nav = nav->anterior;
         }
     } else {
-        temp = listaDuplamenteEncadeada.inicio;
+        nav = listaDuplamenteEncadeada.inicio;
         for (int i = 0; i < indice; i++) {
-            temp = temp->proximo;
+            nav = nav->proximo;
         }
     }
-    novoItem->anterior = temp->anterior;
-    novoItem->proximo = temp;
-    temp->anterior->proximo = novoItem;
-    temp->anterior = novoItem;
+    novoItem->anterior = nav->anterior;
+    novoItem->proximo = nav;
+    nav->anterior->proximo = novoItem;
+    nav->anterior = novoItem;
     return true;
 }
 
@@ -229,17 +229,14 @@ inline int contador = 0;
 template <typename Tipo>
 void bubbleSort(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada) {
     contador = 0;
-    int n = obterTamanhoLista(listaDuplamenteEncadeada);
-
     std::cout << "Contador BubbleSort: " << contador << std::endl;
-
-    for (int i = 0; i < n - 1; i++) {
+    Item<Tipo> *navFinal = listaDuplamenteEncadeada.fim;
+    for (Item<Tipo> *navInicioI = listaDuplamenteEncadeada.inicio; navInicioI->proximo->proximo != nullptr;navInicioI = navInicioI->proximo) {
         bool trocado = false;
-        for (int j = 0; j < n - i - 1; j++) {
-            Item<Tipo> *dadoJ = obterItem(listaDuplamenteEncadeada, j);
-            Item<Tipo> *dadoJ1 = obterItem(listaDuplamenteEncadeada, j + 1);
-            if (dadoJ->dado > dadoJ1->dado) {
-                trocarItens(dadoJ, dadoJ1);
+        navFinal = navFinal->anterior;
+        for (Item<Tipo> *navInicioJ = listaDuplamenteEncadeada.inicio;navInicioJ != navFinal;navInicioJ=navInicioJ->proximo) {
+            if (navInicioJ->dado > navInicioJ->proximo->dado) {
+                trocarItens(navInicioJ, navInicioJ->proximo);
                 trocado = true;
                 contador++;
             }
@@ -252,53 +249,36 @@ void bubbleSort(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada) {
 }
 
 template <typename Tipo>
-int particionar(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, int baixo, int alto) {
-    // Selecionando o último elemento como pivô
-    Item<Tipo> *pivo = obterItem(listaDuplamenteEncadeada, alto);
+Item<Tipo> *particionar(Item<Tipo> *baixo, Item<Tipo> *alto) {
+    Item<Tipo> *pivo = alto;
+    Item<Tipo> *indice = baixo;
 
-    // Índice do elemento logo antes do último elemento
-    // É usado para troca
-    int i = (baixo - 1);
-
-    for (int j = baixo; j <= alto - 1; j++) {
-        // Se o elemento atual for menor ou
-        // igual ao pivô
-        Item<Tipo> *itemJ = obterItem(listaDuplamenteEncadeada, j);
-        if (itemJ->dado <= pivo->dado) {
-            i++;
-            trocarItens(obterItem(listaDuplamenteEncadeada, i), itemJ);
+    for (Item<Tipo> *nav = baixo; nav != alto->anterior; nav=nav->proximo) {
+        if (nav->dado <= pivo->dado) {
+            trocarItens(indice, nav);
+            indice = indice->proximo;
             contador++;
         }
     }
 
-    // Colocar o pivô na sua posição
-    trocarItens(obterItem(listaDuplamenteEncadeada, i + 1), pivo);
+    trocarItens(indice, pivo);
     contador++;
-
-    // Retornar o ponto de partição
-    return (i + 1);
+    return indice;
 }
 
 template <typename Tipo>
-void quickSort(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, int baixo, int alto) {
-    // Caso base: Esta parte será executada até o índice inicial
-    // baixo ser menor que o índice final alto
+void quickSort(Item<Tipo> *baixo, Item<Tipo> *alto) {
     if (baixo < alto) {
-        // pi é o Índice de Partição, listaDuplamenteEncadeada[p] está agora no
-        // lugar certo
-        int pi = particionar(listaDuplamenteEncadeada, baixo, alto);
-
-        // Separadamente ordenar elementos antes e depois do
-        // Índice de Partição pi
-        quickSort(listaDuplamenteEncadeada, baixo, pi - 1);
-        quickSort(listaDuplamenteEncadeada, pi + 1, alto);
+        const Item<Tipo> *pi = particionar(baixo, alto);
+        quickSort(baixo, pi->anterior);
+        quickSort(pi->proximo, alto);
     }
 }
 
 template <typename Tipo>
 void quickSort(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada) {
     contador = 0;
-    quickSort(listaDuplamenteEncadeada, 0, obterTamanhoLista(listaDuplamenteEncadeada) - 1);
+    quickSort(listaDuplamenteEncadeada.inicio, listaDuplamenteEncadeada.fim);
     std::cout << "Contador QuickSort: " << contador << std::endl;
 }
 

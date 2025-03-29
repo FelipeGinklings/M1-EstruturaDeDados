@@ -2,6 +2,8 @@
 #define genericList_H_INCLUDED
 
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 template <typename Tipo>
 struct Item {
@@ -60,7 +62,7 @@ bool removerFim(ListaEncadeada<Tipo> &listaEncadeada) {
 template <typename Tipo>
 bool adicionarFim(ListaEncadeada<Tipo> &listaEncadeada, Tipo item) {
     Item<Tipo> *temp = listaEncadeada.inicio;
-    Item<Tipo> *novoItem = new Item<Tipo>;
+    auto *novoItem = new Item<Tipo>;
     novoItem->dado = item;
     novoItem->proximo = nullptr;
 
@@ -92,7 +94,7 @@ bool removerInicio(ListaEncadeada<Tipo> &listaEncadeada) {
 
 template <typename Tipo>
 bool adicionarInicio(ListaEncadeada<Tipo> &listaEncadeada, Tipo item) {
-    Item<Tipo> *novoItem = new Item<Tipo>;
+    auto *novoItem = new Item<Tipo>;
     novoItem->dado = item;
     if (listaEncadeada.inicio == nullptr)
         novoItem->proximo = nullptr;
@@ -128,7 +130,7 @@ bool adicionarPosicao(ListaEncadeada<Tipo> &listaEncadeada, Tipo item, int indic
     if (indice < 0 || indice >= tamanho)
         return false;
     Item<Tipo> *temp = listaEncadeada.inicio;
-    Item<Tipo> *novoItem = new Item<Tipo>;
+    auto *novoItem = new Item<Tipo>;
     novoItem->dado = item;
 
     if (indice == 0)
@@ -145,7 +147,7 @@ bool adicionarPosicao(ListaEncadeada<Tipo> &listaEncadeada, Tipo item, int indic
 
 template <typename Tipo>
 Item<Tipo> *obterItem(ListaEncadeada<Tipo> &listaEncadeada, int indice) {
-    if (indice >= 0 && indice < obterTamanhoLista(listaEncadeada) && listaEncadeada.inicio != nullptr) return nullptr;
+    if (indice < 0 || indice >= obterTamanhoLista(listaEncadeada) || listaEncadeada.inicio == nullptr) return nullptr;
     Item<Tipo> *item = listaEncadeada.inicio;
 
     for (int i = 0; i < indice; i++)
@@ -164,7 +166,7 @@ void trocarItens(Item<Tipo> *itemA, Item<Tipo> *itemB) {
 template <typename Tipo>
 void embaralhar(ListaEncadeada<Tipo> &listaEncadeada) {
     srand(time(nullptr));
-    for (int i = obterTamanhoLista(listaEncadeada) - 1; i > 0; i--) {
+    for (int i = obterTamanhoLista(listaEncadeada) - 1; i > 0; --i) {
         int j = rand() % (i + 1);
         Item<Tipo> *itemI = obterItem(listaEncadeada, i);
         Item<Tipo> *itemJ = obterItem(listaEncadeada, j);
@@ -185,19 +187,18 @@ bool distribuir(ListaEncadeada<Tipo> &listaOrigem, ListaEncadeada<Tipo> &listaDe
     return true;
 }
 
-int contador = 0;
+inline int contador = 0;
 
 // Uma versão otimizada do Bubble Sort
 template <typename Tipo>
 void bubbleSort(ListaEncadeada<Tipo> &listaEncadeada) {
     contador = 0;
     int n = obterTamanhoLista(listaEncadeada);
-    bool trocado;
 
     std::cout << "Contador BubbleSort: " << contador << std::endl;
 
     for (int i = 0; i < n - 1; i++) {
-        trocado = false;
+        bool trocado = false;
         for (int j = 0; j < n - i - 1; j++) {
             Item<Tipo> *dadoJ = obterItem(listaEncadeada, j);
             Item<Tipo> *dadoJ1 = obterItem(listaEncadeada, j + 1);
@@ -216,43 +217,26 @@ void bubbleSort(ListaEncadeada<Tipo> &listaEncadeada) {
 
 template <typename Tipo>
 int particionar(ListaEncadeada<Tipo> &listaEncadeada, int baixo, int alto) {
-    // Selecionando o último elemento como pivô
     Item<Tipo> *pivo = obterItem(listaEncadeada, alto);
-
-    // Índice do elemento logo antes do último elemento
-    // É usado para troca
-    int i = (baixo - 1);
+    int indice = baixo;
 
     for (int j = baixo; j <= alto - 1; j++) {
-        // Se o elemento atual for menor ou
-        // igual ao pivô
-        Item<Tipo> *itemJ = obterItem(listaEncadeada, j);
-        if (itemJ->dado <= pivo->dado) {
-            i++;
-            trocarItens(obterItem(listaEncadeada, i), itemJ);
+        if (Item<Tipo> *itemJ = obterItem(listaEncadeada, j); itemJ->dado <= pivo->dado) {
+            trocarItens(obterItem(listaEncadeada, indice), itemJ);
+            indice++;
             contador++;
         }
     }
 
-    // Colocar o pivô na sua posição
-    trocarItens(obterItem(listaEncadeada, i + 1), pivo);
+    trocarItens(obterItem(listaEncadeada, indice), pivo);
     contador++;
-
-    // Retornar o ponto de partição
-    return (i + 1);
+    return indice;
 }
 
 template <typename Tipo>
 void quickSort(ListaEncadeada<Tipo> &listaEncadeada, int baixo, int alto) {
-    // Caso base: Esta parte será executada até que o índice inicial
-    // baixo seja menor que o índice final alto
     if (baixo < alto) {
-        // pi é o Índice de Partição, listaEncadeada[p] está agora no
-        // lugar certo
-        int pi = particionar(listaEncadeada, baixo, alto);
-
-        // Separadamente ordenar elementos antes e depois do
-        // Índice de Partição pi
+        const int pi = particionar(listaEncadeada, baixo, alto);
         quickSort(listaEncadeada, baixo, pi - 1);
         quickSort(listaEncadeada, pi + 1, alto);
     }

@@ -1,0 +1,9 @@
+*.pdf
+*.exe
+*.clang-format
+./vscode
+*.docx
+.idea
+*.json
+*.txt
+cmake-build-debug

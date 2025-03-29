@@ -4,7 +4,7 @@
 #include <ctime>
 
 #include "genericList.hpp"
-#include "poker.hpp"
+#include "pokerGL.hpp"
 
 
 void jogo(
@@ -77,7 +77,7 @@ void testes(ListaDeT<TipoCarta, 52> dealer) {
     imprimirBaralho(dealer);
 }
 
-int main() {
+int mainGenericList() {
     ListaDeT<TipoCarta, 52> dealer;
     ListaDeT<TipoCarta, 5> mesa;
     ListaDeT<TipoCarta, 2> jogadores[4];
