@@ -1,27 +1,27 @@
 #ifndef genericList_H_INCLUDED
 #define genericList_H_INCLUDED
 
-#include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
 
-template <typename Tipo>
+template<typename Tipo>
 struct Item {
     Tipo dado;
     Item<Tipo> *proximo;
 };
 
-template <typename Tipo>
+template<typename Tipo>
 struct ListaEncadeada {
     Item<Tipo> *inicio;
 };
 
-template <typename Tipo>
+template<typename Tipo>
 void inicializarLista(ListaEncadeada<Tipo> &listaEncadeada) {
     listaEncadeada.inicio = nullptr;
 };
 
-template <typename Tipo>
+template<typename Tipo>
 int obterTamanhoLista(ListaEncadeada<Tipo> listaEncadeada) {
     Item<Tipo> *temp = listaEncadeada.inicio;
 
@@ -31,18 +31,16 @@ int obterTamanhoLista(ListaEncadeada<Tipo> listaEncadeada) {
 
     int i;
 
-    for (i = 0; temp != nullptr; i++)
-        temp = temp->proximo;
+    for (i = 0; temp != nullptr; i++) temp = temp->proximo;
 
     return i;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 bool removerFim(ListaEncadeada<Tipo> &listaEncadeada) {
     Item<Tipo> *temp = listaEncadeada.inicio;
 
-    if (temp == nullptr)
-        return false;
+    if (temp == nullptr) return false;
 
     if (temp->proximo == nullptr) {
         delete temp;
@@ -50,8 +48,7 @@ bool removerFim(ListaEncadeada<Tipo> &listaEncadeada) {
         return true;
     }
 
-    while (temp->proximo->proximo != nullptr)
-        temp = temp->proximo;
+    while (temp->proximo->proximo != nullptr) temp = temp->proximo;
 
     Item<Tipo> *paraDeletar = temp->proximo;
     temp->proximo = nullptr;
@@ -59,7 +56,7 @@ bool removerFim(ListaEncadeada<Tipo> &listaEncadeada) {
     return true;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 bool adicionarFim(ListaEncadeada<Tipo> &listaEncadeada, Tipo item) {
     Item<Tipo> *temp = listaEncadeada.inicio;
     auto *novoItem = new Item<Tipo>;
@@ -71,15 +68,14 @@ bool adicionarFim(ListaEncadeada<Tipo> &listaEncadeada, Tipo item) {
         return true;
     }
 
-    while (temp->proximo != nullptr)
-        temp = temp->proximo;
+    while (temp->proximo != nullptr) temp = temp->proximo;
 
     temp->proximo = novoItem;
 
     return true;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 bool removerInicio(ListaEncadeada<Tipo> &listaEncadeada) {
     if (listaEncadeada.inicio == nullptr) {
         return false;
@@ -92,7 +88,7 @@ bool removerInicio(ListaEncadeada<Tipo> &listaEncadeada) {
     return true;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 bool adicionarInicio(ListaEncadeada<Tipo> &listaEncadeada, Tipo item) {
     auto *novoItem = new Item<Tipo>;
     novoItem->dado = item;
@@ -105,18 +101,15 @@ bool adicionarInicio(ListaEncadeada<Tipo> &listaEncadeada, Tipo item) {
     return true;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 bool removerPosicao(ListaEncadeada<Tipo> &listaEncadeada, int indice) {
     int tamanho = obterTamanhoLista(listaEncadeada);
     Item<Tipo> *temp = listaEncadeada.inicio;
-    if (indice < 0 || indice >= tamanho || temp == nullptr)
-        return false;
+    if (indice < 0 || indice >= tamanho || temp == nullptr) return false;
 
-    if (indice == 0)
-        return removerInicio(listaEncadeada);
+    if (indice == 0) return removerInicio(listaEncadeada);
 
-    for (int i = 0; i < indice - 1; i++)
-        temp = temp->proximo;
+    for (int i = 0; i < indice - 1; i++) temp = temp->proximo;
 
     Item<Tipo> *paraDeletar = temp->proximo;
     temp->proximo = temp->proximo->proximo;
@@ -124,20 +117,17 @@ bool removerPosicao(ListaEncadeada<Tipo> &listaEncadeada, int indice) {
     return true;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 bool adicionarPosicao(ListaEncadeada<Tipo> &listaEncadeada, Tipo item, int indice) {
     int tamanho = obterTamanhoLista(listaEncadeada);
-    if (indice < 0 || indice >= tamanho)
-        return false;
+    if (indice < 0 || indice >= tamanho) return false;
     Item<Tipo> *temp = listaEncadeada.inicio;
     auto *novoItem = new Item<Tipo>;
     novoItem->dado = item;
 
-    if (indice == 0)
-        return adicionarInicio(listaEncadeada, item);
+    if (indice == 0) return adicionarInicio(listaEncadeada, item);
 
-    for (int i = 0; i < indice - 1; i++)
-        temp = temp->proximo;
+    for (int i = 0; i < indice - 1; i++) temp = temp->proximo;
 
     novoItem->proximo = temp->proximo;
     temp->proximo = novoItem;
@@ -145,25 +135,24 @@ bool adicionarPosicao(ListaEncadeada<Tipo> &listaEncadeada, Tipo item, int indic
     return true;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 Item<Tipo> *obterItem(ListaEncadeada<Tipo> &listaEncadeada, int indice) {
     if (indice < 0 || indice >= obterTamanhoLista(listaEncadeada) || listaEncadeada.inicio == nullptr) return nullptr;
     Item<Tipo> *item = listaEncadeada.inicio;
 
-    for (int i = 0; i < indice; i++)
-        item = item->proximo;
+    for (int i = 0; i < indice; i++) item = item->proximo;
 
     return item;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 void trocarItens(Item<Tipo> *itemA, Item<Tipo> *itemB) {
     Tipo tempDado = itemA->dado;
     itemA->dado = itemB->dado;
     itemB->dado = tempDado;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 void embaralhar(ListaEncadeada<Tipo> &listaEncadeada) {
     srand(time(nullptr));
     for (int i = obterTamanhoLista(listaEncadeada) - 1; i > 0; --i) {
@@ -174,7 +163,7 @@ void embaralhar(ListaEncadeada<Tipo> &listaEncadeada) {
     }
 }
 
-template <typename Tipo>
+template<typename Tipo>
 bool distribuir(ListaEncadeada<Tipo> &listaOrigem, ListaEncadeada<Tipo> &listaDestino, int quantidade) {
     if (listaOrigem.inicio == nullptr || quantidade < 0) {
         return false;
@@ -190,50 +179,54 @@ bool distribuir(ListaEncadeada<Tipo> &listaOrigem, ListaEncadeada<Tipo> &listaDe
 inline int contador = 0;
 
 // Uma versão otimizada do Bubble Sort
-template <typename Tipo>
+template<typename Tipo>
 void bubbleSort(ListaEncadeada<Tipo> &listaEncadeada) {
     contador = 0;
-    int n = obterTamanhoLista(listaEncadeada);
-
+    const int n = obterTamanhoLista(listaEncadeada);
     std::cout << "Contador BubbleSort: " << contador << std::endl;
 
     for (int i = 0; i < n - 1; i++) {
+        Item<Tipo> *nav = listaEncadeada.inicio;  // Reset pointer to the start of the list for each pass
         bool trocado = false;
-        for (int j = 0; j < n - i - 1; j++) {
-            Item<Tipo> *dadoJ = obterItem(listaEncadeada, j);
-            Item<Tipo> *dadoJ1 = obterItem(listaEncadeada, j + 1);
-            if (dadoJ->dado > dadoJ1->dado) {
-                trocarItens(dadoJ, dadoJ1);
+        for (int j = 0; j < n - i - 1; j++, nav = nav->proximo) {
+            if (nav->dado > nav->proximo->dado) {
+                trocarItens(nav, nav->proximo);
                 trocado = true;
                 contador++;
             }
         }
-        if (!trocado)
-            break;
+        if (!trocado) break;
     }
 
     std::cout << "Contador BubbleSort: " << contador << std::endl;
 }
 
-template <typename Tipo>
-int particionar(ListaEncadeada<Tipo> &listaEncadeada, int baixo, int alto) {
-    Item<Tipo> *pivo = obterItem(listaEncadeada, alto);
+template<typename Tipo>
+int particionar(ListaEncadeada<Tipo> &listaEncadeada, const int baixo, const int alto) {
+    Item<Tipo> *navI = listaEncadeada.inicio;
+    Item<Tipo> *pivo = listaEncadeada.inicio;
+    for (int i = 0; i < alto; i++) {
+        if (i == baixo) navI = pivo;
+        pivo = pivo->proximo;
+    }
+    Item<Tipo> *navJ = navI;
     int indice = baixo;
 
-    for (int j = baixo; j <= alto - 1; j++) {
-        if (Item<Tipo> *itemJ = obterItem(listaEncadeada, j); itemJ->dado <= pivo->dado) {
-            trocarItens(obterItem(listaEncadeada, indice), itemJ);
+    for (int j = baixo; j < alto; j++, navJ = navJ->proximo) {
+        if (navJ->dado <= pivo->dado) {
+            trocarItens(navI, navJ);
+            navI = navI->proximo;
             indice++;
             contador++;
         }
     }
 
-    trocarItens(obterItem(listaEncadeada, indice), pivo);
+    trocarItens(navI, pivo);
     contador++;
     return indice;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 void quickSort(ListaEncadeada<Tipo> &listaEncadeada, int baixo, int alto) {
     if (baixo < alto) {
         const int pi = particionar(listaEncadeada, baixo, alto);
@@ -242,7 +235,7 @@ void quickSort(ListaEncadeada<Tipo> &listaEncadeada, int baixo, int alto) {
     }
 }
 
-template <typename Tipo>
+template<typename Tipo>
 void quickSort(ListaEncadeada<Tipo> &listaEncadeada) {
     contador = 0;
     quickSort(listaEncadeada, 0, obterTamanhoLista(listaEncadeada) - 1);

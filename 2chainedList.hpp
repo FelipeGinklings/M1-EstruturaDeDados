@@ -3,26 +3,26 @@
 
 #include <iostream>
 
-template <typename Tipo>
+template<typename Tipo>
 struct Item {
     Tipo dado;
     Item *proximo;
     Item *anterior;
 };
 
-template <typename Tipo>
+template<typename Tipo>
 struct ListaDuplamenteEncadeada {
     Item<Tipo> *inicio;
     Item<Tipo> *fim;
 };
 
-template <typename Tipo>
+template<typename Tipo>
 void inicializarLista(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada) {
     listaDuplamenteEncadeada.inicio = nullptr;
     listaDuplamenteEncadeada.fim = nullptr;
 };
 
-template <typename Tipo>
+template<typename Tipo>
 int obterTamanhoLista(ListaDuplamenteEncadeada<Tipo> listaDuplamenteEncadeada) {
     Item<Tipo> *nav = listaDuplamenteEncadeada.inicio;
 
@@ -32,13 +32,12 @@ int obterTamanhoLista(ListaDuplamenteEncadeada<Tipo> listaDuplamenteEncadeada) {
 
     int i;
 
-    for (i = 0; nav != nullptr; i++)
-        nav = nav->proximo;
+    for (i = 0; nav != nullptr; i++) nav = nav->proximo;
 
     return i;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 bool removerFim(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada) {
     if (listaDuplamenteEncadeada.fim == nullptr) return false;
 
@@ -49,7 +48,7 @@ bool removerFim(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada) {
     return true;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 bool adicionarFim(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, Tipo item) {
     auto *novoItem = new Item<Tipo>;
     novoItem->dado = item;
@@ -67,7 +66,7 @@ bool adicionarFim(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, Tipo
     return true;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 bool removerInicio(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada) {
     if (listaDuplamenteEncadeada.inicio == nullptr) {
         return false;
@@ -81,7 +80,7 @@ bool removerInicio(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada) {
     return true;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 bool adicionarInicio(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, Tipo item) {
     auto *novoItem = new Item<Tipo>;
     novoItem->dado = item;
@@ -100,12 +99,12 @@ bool adicionarInicio(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, T
     return true;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 bool removerPosicao(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, const int indice) {
     const int tamanho = obterTamanhoLista(listaDuplamenteEncadeada);
     if (listaDuplamenteEncadeada.inicio == nullptr || indice < 0 || indice > tamanho) return false;
     if (indice == 0) return removerInicio(listaDuplamenteEncadeada);
-    if (indice == tamanho-1) return removerFim(listaDuplamenteEncadeada);
+    if (indice == tamanho - 1) return removerFim(listaDuplamenteEncadeada);
 
     const bool maiorQueMetade = indice > tamanho / 2;
     Item<Tipo> *nav;
@@ -128,7 +127,7 @@ bool removerPosicao(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, co
     return true;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 bool adicionarPosicao(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, Tipo item, const int indice) {
     const int tamanho = obterTamanhoLista(listaDuplamenteEncadeada);
 
@@ -151,7 +150,7 @@ bool adicionarPosicao(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, 
 
     if (maiorQueMetade) {
         nav = listaDuplamenteEncadeada.fim;
-        for (int i = tamanho-1; i > indice; --i) {
+        for (int i = tamanho - 1; i > indice; --i) {
             nav = nav->anterior;
         }
     } else {
@@ -167,9 +166,11 @@ bool adicionarPosicao(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, 
     return true;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 Item<Tipo> *obterItem(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, int indice) {
-    if (indice < 0 && indice >= obterTamanhoLista(listaDuplamenteEncadeada) && listaDuplamenteEncadeada.inicio == nullptr) return nullptr;
+    if (indice < 0 && indice >= obterTamanhoLista(listaDuplamenteEncadeada) &&
+        listaDuplamenteEncadeada.inicio == nullptr)
+        return nullptr;
 
     const int tamanho = obterTamanhoLista(listaDuplamenteEncadeada);
     const bool maiorQueMetade = indice > tamanho / 2;
@@ -191,14 +192,14 @@ Item<Tipo> *obterItem(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada, 
     return item;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 void trocarItens(Item<Tipo> *itemA, Item<Tipo> *itemB) {
     Tipo tempDado = itemA->dado;
     itemA->dado = itemB->dado;
     itemB->dado = tempDado;
 }
 
-template <typename Tipo>
+template<typename Tipo>
 void embaralhar(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada) {
     srand(time(nullptr));
     for (int i = obterTamanhoLista(listaDuplamenteEncadeada) - 1; i > 0; --i) {
@@ -226,59 +227,67 @@ bool distribuir(ListaDuplamenteEncadeada<Tipo> &listaOrigem, ListaDuplamenteEnca
 inline int contador = 0;
 
 // Uma versão otimizada do Bubble Sort
-template <typename Tipo>
+template<typename Tipo>
 void bubbleSort(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada) {
     contador = 0;
     std::cout << "Contador BubbleSort: " << contador << std::endl;
     Item<Tipo> *navFinal = listaDuplamenteEncadeada.fim;
-    for (Item<Tipo> *navInicioI = listaDuplamenteEncadeada.inicio; navInicioI->proximo->proximo != nullptr;navInicioI = navInicioI->proximo) {
+    for (Item<Tipo> *navInicioI = listaDuplamenteEncadeada.inicio; navInicioI->proximo->proximo != nullptr;
+         navInicioI = navInicioI->proximo) {
         bool trocado = false;
         navFinal = navFinal->anterior;
-        for (Item<Tipo> *navInicioJ = listaDuplamenteEncadeada.inicio;navInicioJ != navFinal;navInicioJ=navInicioJ->proximo) {
+        for (Item<Tipo> *navInicioJ = listaDuplamenteEncadeada.inicio; navInicioJ != navFinal;
+             navInicioJ = navInicioJ->proximo) {
             if (navInicioJ->dado > navInicioJ->proximo->dado) {
                 trocarItens(navInicioJ, navInicioJ->proximo);
                 trocado = true;
                 contador++;
             }
         }
-        if (!trocado)
-            break;
+        if (!trocado) break;
     }
 
     std::cout << "Contador BubbleSort: " << contador << std::endl;
 }
 
-template <typename Tipo>
-Item<Tipo> *particionar(Item<Tipo> *baixo, Item<Tipo> *alto) {
-    Item<Tipo> *pivo = alto;
-    Item<Tipo> *indice = baixo;
+template<typename Tipo>
+int particionar(ListaDuplamenteEncadeada<Tipo> &listaEncadeada, const int baixo, const int alto) {
+    Item<Tipo> *navI = listaEncadeada.inicio;
+    Item<Tipo> *pivo = listaEncadeada.inicio;
+    for (int i = 0; i < alto; i++) {
+        if (i == baixo) navI = pivo;
+        pivo = pivo->proximo;
+    }
+    Item<Tipo> *navJ = navI;
+    int indice = baixo;
 
-    for (Item<Tipo> *nav = baixo; nav != alto->anterior; nav=nav->proximo) {
-        if (nav->dado <= pivo->dado) {
-            trocarItens(indice, nav);
-            indice = indice->proximo;
+    for (int j = baixo; j < alto; j++, navJ = navJ->proximo) {
+        if (navJ->dado <= pivo->dado) {
+            trocarItens(navI, navJ);
+            navI = navI->proximo;
+            indice++;
             contador++;
         }
     }
 
-    trocarItens(indice, pivo);
+    trocarItens(navI, pivo);
     contador++;
     return indice;
 }
 
-template <typename Tipo>
-void quickSort(Item<Tipo> *baixo, Item<Tipo> *alto) {
+template<typename Tipo>
+void quickSort(ListaDuplamenteEncadeada<Tipo> &listaEncadeada, int baixo, int alto) {
     if (baixo < alto) {
-        const Item<Tipo> *pi = particionar(baixo, alto);
-        quickSort(baixo, pi->anterior);
-        quickSort(pi->proximo, alto);
+        const int pi = particionar(listaEncadeada, baixo, alto);
+        quickSort(listaEncadeada, baixo, pi - 1);
+        quickSort(listaEncadeada, pi + 1, alto);
     }
 }
 
-template <typename Tipo>
+template<typename Tipo>
 void quickSort(ListaDuplamenteEncadeada<Tipo> &listaDuplamenteEncadeada) {
     contador = 0;
-    quickSort(listaDuplamenteEncadeada.inicio, listaDuplamenteEncadeada.fim);
+    quickSort(listaDuplamenteEncadeada.inicio, 0, obterTamanhoLista(listaDuplamenteEncadeada) - 1);
     std::cout << "Contador QuickSort: " << contador << std::endl;
 }
 

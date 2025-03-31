@@ -1,10 +1,10 @@
-#include "main2ChainedList.hpp"
-// #include "mainChainedList.hpp"
-
+// #include "main2ChainedList.hpp"
 #include <iostream>
+
+#include "mainChainedList.hpp"
 int main() {
-    main2ChainedList();
-    // mainChainedList();
+    // main2ChainedList();
+    mainChainedList();
 
     return 0;
 }
